@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script th:src="@{/jquery/jquery-3.4.1.js}"></script>
+</head>
+<body>
+	<center><form id="myForm" method="GET">
+			<input type="hidden" id="pageNum" name="pageNum" th:value="${pageInfo.pageNum}"></form>
+					<input type="button" th:onclick="'javascript:add()'" value="添加">
+<form id="permissionRole" method="GET"></form>
+		<table border="1">
+			<tr>
+				<th>序号</th>
+				<th>名称</th>
+				<th>操作</th>
+			</tr>
+			<tr th:each="role : ${datas}">
+				<td th:text="${role.id}">序号</td>
+				<td th:text="${role.name}">名称</td>
+				<td>
+					<input type="button" th:onclick="'javascript:edit('+${role.id}+')'" value="编辑">&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="button" th:onclick="'javascript:del('+${role.id}+')'" value="删除">&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="button" th:onclick="'javascript:permissionRole(' + ${role.id} + ')'" value="资源明细">
+				</td>
+			</tr>
+			<tr th:if="${datas == null}">
+				<td colspan="3" th:if="${datas == null}">没有查到记录</td>
+			</tr>
+		</table>
+		<lable th:text="'当前页'+${pageInfo.pageNum}"></lable>
+			<lable th:text="'总页数'+${pageInfo.pages}"></lable>
+			<lable th:text="'总记录数'+${pageInfo.total}"></lable>
+			<lable th:text="'每页记录数'+${pageInfo.pageSize}"></lable><br/>
+			<input type=button th:onclick="'javascript:page('+${pageInfo.navigateFirstPage}+')'" th:disabled="${pageInfo.isFirstPage}" value="首页"/> 
+			<input type=button th:onclick="'javascript:page('+${pageInfo.prePage}+')'" th:disabled="${pageInfo.isFirstPage}" value="上一页"> 
+			<lable th:each="page : ${pageInfo.navigatepageNums}">
+				<a th:href="@{'/permission?pageNum=' + ${page}}" th:text="${page}"></a>
+			</lable>
+			<input type=button th:onclick="'javascript:page('+${pageInfo.nextPage}+')'" value="下一页" th:disabled="${pageInfo.isLastPage}">  
+			<input type=button th:onclick="'javascript:page('+${pageInfo.navigateLastPage}+')'" th:disabled="${pageInfo.isLastPage}" value="尾页"> 
+	</center>
+</body>
+<script type="text/javascript">
+
+		function page(pageNum) {
+			$("#pageNum").val(pageNum);
+			document.getElementById('myForm').action = "/role";
+			document.getElementById('myForm').method = "GET";
+			document.getElementById("myForm").submit();
+		}
+		function edit(id) {
+			document.getElementById('myForm').action = "/role/"+id;
+			document.getElementById('myForm').method = "GET";
+			document.getElementById("myForm").submit();
+		}
+		
+		function del(id) {
+			document.getElementById('myForm').action = "/role/delete/"+id;
+			document.getElementById('myForm').method = "GET";
+			document.getElementById("myForm").submit();
+		}
+		
+		function add() {
+			document.getElementById('myForm').action = "/role/roleAdd";
+			document.getElementById('myForm').method = "GET";
+			document.getElementById("myForm").submit();
+		}
+
+		function permissionRole(roleId){
+			 document.getElementById('myForm').action = "/permissionRole/"+roleId, 
+			 document.getElementById('myForm').method = "GET"; 
+	         document.getElementById("myForm").submit();  
+		}
+</script>
+</html>

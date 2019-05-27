@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script th:src="@{/jquery/jquery-3.4.1.js}"></script>
+</head>
+<body>
+	<center>
+		<form action="/permission" method="post">
+		<table border="1">
+			<tr>
+				<th>编码</th><th><input type="text" id="url" name="url" value="123"></th>
+			</tr>
+			<tr>
+				<th>名称</th><th><input type="text" id="name" name="name" value="123"></th>
+			</tr>
+			<tr>
+				<th>描述</th><th><input type="text" id="descritpion" name="descritpion" value="123"></th>
+			</tr>
+			<tr>
+				<th>父级</th><th><input type="text" id="pid" name="pid" th:value="${pid}"></th>
+			</tr>
+			<tr>
+				<th colspan="2">
+					<input type="submit" th:value="保存">
+					<input type="button" onclick="javascript:history.back(-1);" value="上一步">
+				</th>
+			</tr>
+		</table>
+		</form>
+	</center>
+</body>
+</html>

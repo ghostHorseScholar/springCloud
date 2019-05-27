@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script th:src="@{/jquery/jquery-3.4.1.js}"></script>
+</head>
+<body>
+	<center>
+	<form id="myForm" ></form>
+<form action="/roleUser" method="post" onsubmit="aa()">
+<input type="hidden" id="userId" name="userId" th:value="${userId}">
+		<table border="1">
+			<tr>
+				<th></th>
+				<th>序号</th>
+				<th>名称</th>
+				<th>操作</th>
+			</tr>
+			<tr th:each="role,roleStat : ${datas}">
+				<td>
+					<input type="checkbox" th:value="${role.id}" th:checked="${role.userId>0}" id="roleId" name="roleId">
+				</td>
+				<td th:text="${roleStat.index}"></td>
+				<td th:text="${role.name}">名称</td>
+				<td><input type="button" th:onclick="'javascript:permissionRole(' + ${role.id} + ')'" value="分配资源"></td>
+			</tr>
+			<tr th:if="${datas == null}">
+				<td colspan="3" th:if="${datas == null}">没有查到记录</td>
+			</tr>
+		</table>
+		<input type="submit" value="保存">
+		<input type="button" onclick="javascript:history.back(-1);" value="上一步">
+	</center>
+</form>
+</body>
+<script type="text/javascript">
+
+function aa(){
+	var obj = document.getElementsByName("roleId");
+	for (var a in obj) {
+		if (obj[a].checked)
+		alert(obj[a].value);
+	}
+}
+
+function permissionRole(roleId){
+	 document.getElementById('myForm').action = "/permissionRole/"+roleId, 
+	 document.getElementById('myForm').method = "GET"; 
+     document.getElementById("myForm").submit();  
+}
+</script>
+</html>

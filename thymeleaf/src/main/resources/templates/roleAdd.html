@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script th:src="@{/jquery/jquery-3.4.1.js}"></script>
+</head>
+<body>
+	<center>
+		<form method="POST" action="/role">
+		<table border="1">
+			<tr>
+				<th>角色名</th><th><input type="text" id="name" name="name" value=""></th>
+			</tr>
+				<tr><th colspan="2"><input type="submit" th:value="保存">
+					<input type="button" onclick="javascript:history.back(-1);" value="上一步"></th></tr>
+		</table>
+		</form>
+	</center>
+</body>
+</html>

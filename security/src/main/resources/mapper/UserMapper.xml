@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.security.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.security.entity.UserEntity">
+    <result column="ID" jdbcType="NUMERIC" property="id" />
+    <result column="USERNAME" jdbcType="VARCHAR" property="userName" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+  </resultMap>
+  
+  <insert id="insert" parameterType="com.security.entity.UserEntity">
+  	INSERT INTO SYS_USER(USERNAME,PASSWORD) VALUES(#{userName},#{password})
+  </insert>
+  
+  <update id="update" parameterType="com.security.entity.UserEntity">
+  	UPDATE SYS_USER SET PASSWORD=#{password} WHERE USERNAME=#{userName}
+  </update>
+  
+  <delete id="del" parameterType="java.lang.Integer">
+  	DELETE FROM SYS_USER WHERE ID=#{id}
+  </delete>
+  
+  <select id="findOne" resultMap="BaseResultMap">
+  	SELECT * FROM SYS_USER WHERE ID=#{id}
+  </select>
+  
+  <select id="findByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	SELECT * FROM SYS_USER WHERE USERNAME=#{userName}
+  </select>
+  
+  <select id="findAll" resultMap="BaseResultMap">
+  	SELECT * FROM SYS_USER ORDER BY USERNAME
+  </select>
+</mapper>

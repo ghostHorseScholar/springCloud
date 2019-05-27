@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script th:src="@{/jquery/jquery-3.4.1.js}"></script>
+<script th:src="@{/jquery/jquery.ztree.core.js}"></script>
+<script th:src="@{/jquery/jquery.ztree.excheck.js}"></script>
+<script th:src="@{/jquery/jquery.ztree.exedit.js}"></script>
+<link rel="stylesheet"
+	th:href="@{/css/bootstrapStyle/bootstrapStyle.css}" />
+</head>
+<body>
+	<center>
+		<form action="/permissionRole" method="post" onsubmit="aa()">
+			<input type="hidden" id="roleId" name="roleId" th:value="${roleId}">
+			<input type="hidden" id="datas" name="datas" th:value="${datas}">
+			<input type="text" id="permissionId" name="permissionId">
+			<h1>zTree - bootstrap 风格</h1>
+			<ul id="treeDemo" class="ztree"></ul>
+			<input type="submit" value="保存"> <input type="button"
+				onclick="javascript:history.back(-1);" value="上一步">
+		</form>
+	</center>
+</body>
+<script type="text/javascript">
+	var setting = {
+		check : {
+			enable : true
+		},
+		data : {
+			simpleData : {
+				enable : true,
+				pIdKey : "pid"
+			}
+		}
+	};
+
+	var zNodes = JSON.parse($("#datas").val());
+	var json = JSON.parse($("#datas").val());
+	var treeObj = "";
+
+	$(document).ready(function() {
+		$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+		treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+		var node = treeObj.getNodes(); //可以获取所有的父节点
+		var nodes = treeObj.transformToArray(node); //获取树所有节点
+		for ( var i in nodes) {
+			for ( var j in json) {
+				if (json[j].roleId > 0 && nodes[i].id == json[j].id) {
+					treeObj.checkNode(nodes[i], true);
+					treeObj.expandNode(nodes[i], true, false);//指定选中ID节点展开
+				}
+			}
+		}
+	});
+
+	function aa() {
+		var ids = "";
+		var checkedNodes = treeObj.getCheckedNodes();
+		for (var i in checkedNodes) {
+			ids += checkedNodes[i].id + ",";
+		}
+		$("#permissionId").val(ids);
+	}
+</script>
+<SCRIPT type="text/javascript">
+	
+</SCRIPT>
+</html>

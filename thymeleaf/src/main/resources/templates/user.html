@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script th:src="@{/jquery/jquery-3.4.1.js}"></script>
+</head>
+<body>
+<form id="myForm" method="GET">
+			<input type="hidden" id="pageNum" name="pageNum" th:value="${pageInfo.pageNum}"></form>
+					<input type="button" th:onclick="'javascript:add()'" value="添加">
+ <table border="1">
+              <tr>  
+                <th>序号</th> 
+                <th>用户名</th>  
+                <th>密码</th>   
+                <th>操作</th>   
+              </tr>
+              <tr th:each="user : ${datas}">  
+                <td th:text="${user.id}">序号</td> 
+                <td th:text="${user.userName}">用户名</td> 
+                <td th:text="${user.password}">密码</td>
+                <td>
+					<input type="button" th:onclick="'javascript:edit('+${user.id}+')'" value="编辑">&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="button" th:onclick="'javascript:del('+${user.id}+')'" value="删除">&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="button" th:onclick="'javascript:roleUser(' + ${user.id} + ')'" value="分配角色">
+				</td>
+              </tr>
+              <tr th:if="${datas == null}">
+              	<td colspan="3" th:if="${datas == null}">没有查到记录</td>
+              </tr>
+            </table>
+            <lable th:text="'当前页'+${pageInfo.pageNum}"></lable>
+			<lable th:text="'总页数'+${pageInfo.pages}"></lable>
+			<lable th:text="'总记录数'+${pageInfo.total}"></lable>
+			<lable th:text="'每页记录数'+${pageInfo.pageSize}"></lable><br/>
+			<input type=button th:onclick="'javascript:page('+${pageInfo.navigateFirstPage}+')'" th:disabled="${pageInfo.isFirstPage}" value="首页"/> 
+			<input type=button th:onclick="'javascript:page('+${pageInfo.prePage}+')'" th:disabled="${pageInfo.isFirstPage}" value="上一页"> 
+			<lable th:each="page : ${pageInfo.navigatepageNums}">
+				<a th:href="@{'/permission?pageNum=' + ${page}}" th:text="${page}"></a>
+			</lable>
+			<input type=button th:onclick="'javascript:page('+${pageInfo.nextPage}+')'" value="下一页" th:disabled="${pageInfo.isLastPage}">  
+			<input type=button th:onclick="'javascript:page('+${pageInfo.navigateLastPage}+')'" th:disabled="${pageInfo.isLastPage}" value="尾页"> 
+</body>
+<script type="text/javascript">
+
+	function page(pageNum) {
+		$("#pageNum").val(pageNum);
+		document.getElementById('myForm').action = "/user";
+		document.getElementById('myForm').method = "GET";
+		document.getElementById("myForm").submit();
+	}
+
+	function edit(id) {
+		document.getElementById('myForm').action = "/user/"+id;
+		document.getElementById('myForm').method = "GET";
+		document.getElementById("myForm").submit();
+	}
+	
+	function del(id) {
+		document.getElementById('myForm').action = "/user/delete/"+id;
+		document.getElementById('myForm').method = "GET";
+		document.getElementById("myForm").submit();
+	}
+	
+	function add() {
+		document.getElementById('myForm').action = "/user/userAdd";
+		document.getElementById('myForm').method = "GET";
+		document.getElementById("myForm").submit();
+	}
+
+	function roleUser(userId){
+		 document.getElementById('myForm').action = "/roleUser/"+userId, 
+		 document.getElementById('myForm').method = "GET"; 
+         document.getElementById("myForm").submit();  
+	}
+</script>
+</html>

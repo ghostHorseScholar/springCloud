@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script th:src="@{/jquery/jquery-3.4.1.js}"></script>
+<script th:src="@{/js/home.js}"></script>
+<!--图标样式-->
+<link rel="stylesheet" type="text/css"
+	href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
+<link rel="stylesheet" th:href="@{/css/home.css}" />
+</head>
+<body>
+	<div class="s-top" align="right">
+		<a href="/logout">退出</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	</div>
+	<div class="s-side">
+		<ul>
+			<li class="s-firstItem first"><i
+					class="fa fa-home"></i> <span>测试系统</span>
+			</a></li>
+
+			<li class="first" th:each="onemenu : ${datas}">
+				<div class="d-firstNav s-firstNav clearfix">
+					<i class="fa fa-bars"></i> <span th:text="${onemenu.name}">一级菜单</span>
+					<i class="fa fa-caret-right fr "></i>
+				</div>
+				<ul class="d-firstDrop s-firstDrop">
+					<li th:each="twoMenu : ${onemenu.subPermission}">
+						<div class="d-secondNav s-secondNav">
+							<a th:href="${twoMenu.url}" target="childframe"> <i
+								class="fa fa-minus-square-o"></i> <span
+								th:text="${twoMenu.name}">二级菜单</span> <i
+								class="fa fa-caret-right fr"></i>
+							</a>
+						</div>
+						<ul class="d-secondDrop s-secondDrop">
+							<li class="s-thirdItem"
+								th:each="threeMenu : ${twoMenu.subPermission}"><a
+								th:href="${threeMenu.url}" target="childframe"
+								th:text="${threeMenu.name}">三级导航</a></li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div class="s-right">
+		<iframe style="width:100%; height:100%;" name="childframe" frameborder=0 src="/user"></iframe>
+	</div>
+</body>
+</html>

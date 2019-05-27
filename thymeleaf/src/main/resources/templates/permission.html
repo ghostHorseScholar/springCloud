@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script th:src="@{/jquery/jquery-3.4.1.js}"></script>
+<script th:src="@{/jquery/jquery.ztree.core.js}"></script>
+<script th:src="@{/jquery/jquery.ztree.excheck.js}"></script>
+<script th:src="@{/jquery/jquery.ztree.exedit.js}"></script>
+<link rel="stylesheet"
+	th:href="@{/css/bootstrapStyle/bootstrapStyle.css}" />
+</head>
+<body>
+	<input type="hidden" id="datas" name="datas" th:value="${datas}">
+	<form id="myForm">
+		<input type="hidden" id="pid" name="pid">
+	</form>
+	<h1>zTree - bootstrap 风格</h1>
+	<ul id="treeDemo" class="ztree"></ul>
+</body>
+<script type="text/javascript">
+	var setting = {
+		view : {
+			addHoverDom : addHoverDom,
+			removeHoverDom : removeHoverDom,
+			selectedMulti : false
+		},
+		data : {
+			simpleData : {
+				enable : true,
+				pIdKey : "pid",
+				rootPId : 0
+			},
+			key : {
+				title : "url",
+				name : "name"
+			}
+		},
+		edit : {
+			enable : true,
+			editNameSelectAll : true,
+			removeTitle : "删除节点",
+			renameTitle: "编辑节点名称"
+		},
+		callback : {
+			beforeEditName : edit,
+			beforeRemove : del
+		}
+	};
+
+	var zNodes = JSON.parse($("#datas").val());
+	var treeObj = null;
+	$(document).ready(function() {
+		treeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+		var node = treeObj.getNodes(); //可以获取所有的父节点
+		var nodes = treeObj.transformToArray(node[0]); //获取树所有节点
+		for ( var i in nodes) {
+			treeObj.expandNode(nodes[i], true, false);
+		}
+	});
+
+	var newCount = 1;
+	function addHoverDom(treeId, treeNode) {
+		var sObj = $("#" + treeNode.tId + "_span");
+		if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0)
+			return;
+		var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+				+ "' title='添加节点' onfocus='this.blur();'></span>";
+		sObj.after(addStr);
+		var btn = $("#addBtn_" + treeNode.tId);
+		if (btn)
+			btn.bind("click", function() {
+				$("#pid").val(treeNode.id);
+				add();
+			});
+	};
+	function removeHoverDom(treeId, treeNode) {
+		$("#addBtn_" + treeNode.tId).unbind().remove();
+	};
+
+	function page(pageNum) {
+		//$("#pageNum").val(pageNum);
+		document.getElementById('myForm').action = "/permission";
+		document.getElementById('myForm').method = "GET";
+		document.getElementById("myForm").submit();
+	}
+
+	function edit(reeId, treeNode) {
+		document.getElementById('myForm').action = "/permission/" + treeNode.id;
+		document.getElementById('myForm').method = "GET";
+		document.getElementById("myForm").submit();
+		return false;
+	}
+
+	function del(reeId, treeNode) {
+		document.getElementById('myForm').action = "/permission/delete/"
+				+ treeNode.id;
+		document.getElementById('myForm').method = "GET";
+		document.getElementById("myForm").submit();
+	}
+
+	function add() {
+		document.getElementById('myForm').action = "/permission/permissionAdd";
+		document.getElementById('myForm').method = "GET";
+		document.getElementById("myForm").submit();
+	}
+</script>
+</html>

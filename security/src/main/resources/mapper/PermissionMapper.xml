@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.security.mapper.PermissionMapper">
+  <resultMap id="BaseResultMap" type="com.security.entity.PermissionEntity">
+    <result column="ID" jdbcType="NUMERIC" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="DESCRITPION" jdbcType="VARCHAR" property="descritpion" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="PID" jdbcType="NUMERIC" property="pid" />
+  </resultMap>
+  
+  <sql id="Base_where_List">
+    <where>
+      	<if test="userId != null">
+      		RU.SYS_USER_ID=#{userId}
+      	</if>
+    </where>
+  </sql>
+  
+  <insert id="insert" parameterType="com.security.entity.RoleEntity">
+	<trim prefix="INSERT INTO SYS_PERMISSION(" suffix=")" suffixOverrides=",">
+  		<if test="name!=null and name!=''">NAME,</if>
+  		<if test="descritpion!=null and descritpion!=''">DESCRITPION,</if>
+  		<if test="url!=null and url!=''">URL,</if>
+  		<if test="pid!=null and pid!=''">PID,</if>
+  	</trim>
+  	<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+  		<if test="name!=null and name!=''">#{name},</if>
+  		<if test="descritpion!=null and descritpion!=''">#{descritpion},</if>
+  		<if test="url!=null and url!=''">#{url},</if>
+  		<if test="pid!=null and pid!=''">#{pid},</if>
+  	</trim>
+  </insert>
+  
+  <update id="update" parameterType="com.security.entity.RoleEntity">
+  	<trim prefix="UPDATE SYS_PERMISSION SET" suffixOverrides=",">
+  		<if test="name!=null and name!=''">NAME=#{name},</if>
+  		<if test="descritpion!=null and descritpion!=''">DESCRITPION=#{descritpion},</if>
+  		<if test="url!=null and url!=''">URL=#{url},</if>
+  		<if test="pid!=null and pid!=''">PID=#{pid},</if>
+  	</trim>
+  	WHERE ID=#{id}
+  </update>
+  
+  <delete id="del" parameterType="java.lang.Integer">
+  	DELETE FROM SYS_PERMISSION WHERE ID=#{id}
+  </delete>
+  
+  <select id="findOne" resultMap="BaseResultMap">
+  	SELECT * FROM SYS_PERMISSION WHERE ID=#{id}
+  </select>
+  
+  <select id="findAll" resultMap="BaseResultMap">
+  	SELECT * FROM SYS_PERMISSION ORDER BY NAME,ID
+  </select>
+  
+  <select id="getPermission" resultType="java.lang.String">
+  	SELECT DISTINCT P.URL FROM SYS_PERMISSION P 
+  	LEFT JOIN SYS_PERMISSION_ROLE PR ON P.ID=PR.SYS_PERMISSION_ID
+  	LEFT JOIN SYS_ROLE_USER RU ON RU.SYS_ROLE_ID=PR.SYS_ROLE_ID
+	<include refid="Base_where_List" />
+  	ORDER BY P.URL
+  </select>
+</mapper>

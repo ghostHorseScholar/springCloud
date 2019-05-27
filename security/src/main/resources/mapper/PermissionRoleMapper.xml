@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.security.mapper.PermissionRoleMapper">
+  <resultMap id="BaseResultMap" type="com.security.entity.PermissionRoleEntity">
+    <result column="SYS_ROLE_ID" jdbcType="NUMERIC" property="roleId" />
+    <result column="SYS_PERMISSION_ID" jdbcType="NUMERIC" property="permissionId" />
+  </resultMap>
+  
+  <resultMap id="permissionMap" type="com.security.entity.PermissionEntity">
+    <result column="ID" jdbcType="NUMERIC" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="DESCRITPION" jdbcType="VARCHAR" property="descritpion" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="PID" jdbcType="NUMERIC" property="pid" />
+    <result column="SYS_ROLE_ID" jdbcType="NUMERIC" property="roleId" />
+    <result column="SYS_USER_ID" jdbcType="NUMERIC" property="userId" />
+  </resultMap>
+  
+  <select id="findAll" resultMap="permissionMap">
+  	SELECT * FROM SYS_PERMISSION_ROLE ORDER BY SYS_ROLE_ID,SYS_PERMISSION_ID
+  </select>
+  
+  <select id="findRole" resultMap="permissionMap">
+  	SELECT DISTINCT P.*,PR.SYS_ROLE_ID FROM SYS_PERMISSION P LEFT JOIN SYS_PERMISSION_ROLE PR ON PR.SYS_PERMISSION_ID=P.ID AND PR.SYS_ROLE_ID= #{roleId} ORDER BY P.NAME,P.URL
+  </select>
+  
+  <select id="findUser" resultMap="permissionMap">
+  	SELECT DISTINCT P.*,PR.SYS_ROLE_ID,RU.SYS_USER_ID FROM SYS_PERMISSION P LEFT JOIN SYS_PERMISSION_ROLE PR ON PR.SYS_PERMISSION_ID=P.ID LEFT JOIN SYS_ROLE_USER RU ON RU.SYS_ROLE_ID=PR.SYS_ROLE_ID WHERE RU.SYS_USER_ID=#{userId} ORDER BY P.NAME,P.URL
+  </select>
+  
+  <select id="findUrl" resultMap="permissionMap">
+  	SELECT DISTINCT P.*,RU.SYS_USER_ID FROM SYS_PERMISSION P LEFT JOIN SYS_PERMISSION_ROLE PR ON PR.SYS_PERMISSION_ID=P.ID LEFT JOIN SYS_ROLE_USER RU ON RU.SYS_ROLE_ID=PR.SYS_ROLE_ID WHERE RU.SYS_USER_ID=#{userId} AND P.PID=#{pid} AND P.TYPE='URL' ORDER BY P.NAME,P.URL
+  </select>
+  
+  <select id="findPermission" resultMap="permissionMap">
+  	<!-- SELECT P.*,PR.SYS_ROLE_ID,RU.SYS_USER_ID FROM SYS_PERMISSION P LEFT JOIN SYS_PERMISSION_ROLE PR ON PR.SYS_PERMISSION_ID=P.ID LEFT JOIN SYS_ROLE_USER RU ON RU.SYS_ROLE_ID=PR.SYS_ROLE_ID AND RU.SYS_USER_ID=#{userId} WHERE P.PID=#{pid} ORDER BY P.NAME,P.URL -->
+  	SELECT DISTINCT P.*,PR.SYS_ROLE_ID FROM SYS_PERMISSION P LEFT JOIN SYS_PERMISSION_ROLE PR ON PR.SYS_PERMISSION_ID=P.ID AND PR.SYS_ROLE_ID=#{roleId} WHERE P.PID=#{pid} ORDER BY P.NAME,P.URL
+  </select>
+  
+  <insert id="insert" parameterType="com.security.entity.RoleUserEntity">
+  	INSERT INTO SYS_PERMISSION_ROLE(SYS_ROLE_ID,SYS_PERMISSION_ID) VALUES(#{roleId},#{permissionId})
+  </insert>
+  
+  <insert id="insertByBatch" parameterType="java.util.List">
+ 	INSERT INTO SYS_PERMISSION_ROLE(SYS_ROLE_ID,SYS_PERMISSION_ID)
+    <foreach collection="list" item="item" index="index" separator="union all">
+      select #{item.roleId}, #{item.permissionId} from dual
+    </foreach>
+  </insert>
+  
+  <delete id="del" parameterType="java.lang.Integer">
+  	DELETE FROM SYS_PERMISSION_ROLE WHERE SYS_PERMISSION_ID=#{permissionId} and SYS_ROLE_ID=#{roleId}
+  </delete>
+  
+  <delete id="delRole" parameterType="java.lang.Integer">
+  	DELETE FROM SYS_PERMISSION_ROLE WHERE SYS_ROLE_ID=#{roleId}
+  </delete>
+  
+  <delete id="delUser" parameterType="java.lang.Integer">
+  	DELETE FROM SYS_PERMISSION_ROLE P WHERE P.SYS_ROLE_ID in (SELECT R.SYS_ROLE_ID FROM SYS_ROLE_USER R WHERE R.SYS_USER_ID=#{userId}}
+  </delete>
+</mapper>
