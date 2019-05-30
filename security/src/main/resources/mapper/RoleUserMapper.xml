@@ -31,6 +31,10 @@
   	DELETE FROM SYS_ROLE_USER WHERE SYS_USER_ID=#{userId}
   </delete>
   
+  <delete id="delRole" parameterType="java.lang.Integer">
+  	DELETE FROM SYS_ROLE_USER WHERE SYS_ROLE_ID=#{roleId}
+  </delete>
+  
   <select id="findAll" resultMap="RoleMap">
   	SELECT R.*,RU.SYS_USER_ID FROM SYS_ROLE_USER RU LEFT JOIN SYS_ROLE R ON R.ID = RU.SYS_ROLE_ID ORDER BY RU.SYS_ROLE_ID,RU.SYS_USER_ID
   </select>

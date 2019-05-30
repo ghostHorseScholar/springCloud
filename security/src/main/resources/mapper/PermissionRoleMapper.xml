@@ -59,4 +59,8 @@
   <delete id="delUser" parameterType="java.lang.Integer">
   	DELETE FROM SYS_PERMISSION_ROLE P WHERE P.SYS_ROLE_ID in (SELECT R.SYS_ROLE_ID FROM SYS_ROLE_USER R WHERE R.SYS_USER_ID=#{userId}}
   </delete>
+  
+  <delete id="delPermission" parameterType="java.lang.Integer">
+  	DELETE FROM SYS_PERMISSION_ROLE WHERE SYS_PERMISSION_ID = #{permissionId}
+  </delete>
 </mapper>

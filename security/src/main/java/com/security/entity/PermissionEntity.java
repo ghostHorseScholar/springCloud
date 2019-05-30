@@ -12,6 +12,7 @@ public class PermissionEntity {
 	private String descritpion;
 	private String url;
 	private Integer pid;
+	private String type;
 	
 	private Integer roleId;
 	private Integer userId;

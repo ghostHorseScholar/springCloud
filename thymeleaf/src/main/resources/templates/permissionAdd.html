@@ -10,16 +10,25 @@
 		<form action="/permission" method="post">
 		<table border="1">
 			<tr>
-				<th>编码</th><th><input type="text" id="url" name="url" value="123"></th>
+				<th>编码</th><th><input type="text" id="url" name="url" placeholder="url"></th>
 			</tr>
 			<tr>
-				<th>名称</th><th><input type="text" id="name" name="name" value="123"></th>
+				<th>名称</th><th><input type="text" id="name" name="name" placeholder="name"></th>
 			</tr>
 			<tr>
-				<th>描述</th><th><input type="text" id="descritpion" name="descritpion" value="123"></th>
+				<th>描述</th><th><input type="text" id="descritpion" name="descritpion" placeholder="descritpion"></th>
 			</tr>
 			<tr>
-				<th>父级</th><th><input type="text" id="pid" name="pid" th:value="${pid}"></th>
+				<th>描述</th>
+				<th align="left">
+					<select id="type" name="type">
+						<option value="button">按钮</option>
+						<option value="url">菜单</option>
+					</select>
+				</th>
+			</tr>
+			<tr>
+				<th>父级</th><th><input type="text" id="pid" name="pid" placeholder="pid" th:value="${pid}"></th>
 			</tr>
 			<tr>
 				<th colspan="2">

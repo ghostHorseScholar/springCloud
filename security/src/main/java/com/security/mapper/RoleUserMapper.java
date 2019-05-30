@@ -21,4 +21,6 @@ public interface RoleUserMapper {
 	int del(int roleId, int userId);
 	
 	int delUser(int userId);
+	
+	int delRole(int roleId);
 }

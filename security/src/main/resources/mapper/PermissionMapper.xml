@@ -7,6 +7,7 @@
     <result column="DESCRITPION" jdbcType="VARCHAR" property="descritpion" />
     <result column="URL" jdbcType="VARCHAR" property="url" />
     <result column="PID" jdbcType="NUMERIC" property="pid" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
   </resultMap>
   
   <sql id="Base_where_List">
@@ -23,12 +24,14 @@
   		<if test="descritpion!=null and descritpion!=''">DESCRITPION,</if>
   		<if test="url!=null and url!=''">URL,</if>
   		<if test="pid!=null and pid!=''">PID,</if>
+  		<if test="type!=null and type!=''">TYPE,</if>
   	</trim>
   	<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
   		<if test="name!=null and name!=''">#{name},</if>
   		<if test="descritpion!=null and descritpion!=''">#{descritpion},</if>
   		<if test="url!=null and url!=''">#{url},</if>
   		<if test="pid!=null and pid!=''">#{pid},</if>
+  		<if test="type!=null and type!=''">#{type},</if>
   	</trim>
   </insert>
   
@@ -37,7 +40,8 @@
   		<if test="name!=null and name!=''">NAME=#{name},</if>
   		<if test="descritpion!=null and descritpion!=''">DESCRITPION=#{descritpion},</if>
   		<if test="url!=null and url!=''">URL=#{url},</if>
-  		<if test="pid!=null and pid!=''">PID=#{pid},</if>
+  		<if test="descritpion!=null and pid >= 0">PID=#{pid},</if>
+  		<if test="type!=null and type!=''">TYPE=#{type},</if>
   	</trim>
   	WHERE ID=#{id}
   </update>

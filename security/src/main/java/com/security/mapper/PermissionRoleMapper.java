@@ -30,4 +30,6 @@ public interface PermissionRoleMapper {
 	int delRole(int roleId);
 	
 	int delUser(int userId);
+	
+	int delPermission(int permissionId);
 }

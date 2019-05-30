@@ -20,6 +20,17 @@
 				<th>描述</th><th><input type="text" id="descritpion" name="descritpion" th:value="${pageInfo.descritpion}"></th>
 			</tr>
 			<tr>
+				<th>描述</th>
+				<th align="left">
+					<select id="type" name="type">
+						<option value="button" th:if="${pageInfo.type}=='button'" selected="true">按钮</option>
+						<option value="button" th:if="${pageInfo.type}!='button'">按钮</option>
+						<option value="url" th:if="${pageInfo.type}=='url'" selected="true">菜单</option>
+						<option value="url" th:if="${pageInfo.type}!='url'">菜单</option>
+					</select>
+				</th>
+			</tr>
+			<tr>
 				<th>父级</th><th><input type="text" id="pid" name="pid" th:value="${pageInfo.pid}"></th>
 			</tr>
 			<tr>

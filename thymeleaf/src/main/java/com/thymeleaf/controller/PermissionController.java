@@ -95,6 +95,7 @@ public class PermissionController {
 		requestMap.add("descritpion", entit.getDescritpion());
 		requestMap.add("url", entit.getUrl());
 		requestMap.add("pid", entit.getPid());
+		requestMap.add("type", entit.getType());
 		
 		return requestMap;
 	}
